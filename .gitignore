@@ -21,3 +21,6 @@ mlruns
 *.sqlite
 # IDE #
 *.vscode
+
+
+models
