@@ -5,7 +5,8 @@ FROM python:3.10.6-buster
 WORKDIR /canine_classifier
 
 # Copy the application code to the container
-COPY canine_classifier /canine_classifier
+COPY snoop_dog /snoop_dog
+COPY models /models
 
 # Install the required dependencies
 COPY requirements.txt /requirements.txt
