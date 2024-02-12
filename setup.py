@@ -1,5 +1,5 @@
 # setup.py
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("requirements.txt") as f:
     content = f.readlines()
@@ -8,6 +8,6 @@ with open("requirements.txt") as f:
 setup(name='snoop_dog',
       version="0.0.1",
       description="A model to classify dog breeds",
-      packages=["snoop_dog"], # You can have several packages, try it
+      packages=find_packages(), # You can have several packages, try it
       install_requires=requirements
 )

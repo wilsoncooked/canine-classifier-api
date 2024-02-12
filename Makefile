@@ -6,3 +6,6 @@ reinstall_package:
 
 run_api:
 	uvicorn snoop_dog.api.api:app --reload
+
+docker_build:
+	docker build ${GAR_IMAGE} .
