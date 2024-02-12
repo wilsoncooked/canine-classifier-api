@@ -27,4 +27,4 @@ async def receive_image(img: UploadFile=File(...)):
     image = img.file
     result = predict_breeds(model, image)
     ### Encoding and responding with the image
-    return {"Dog's DNA":result}
+    return result

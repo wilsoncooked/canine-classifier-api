@@ -23,24 +23,28 @@ def format_predictions(predictions, class_names, min_probability=0.01):
     # Take top 5 predictions
     top_5_indices = filtered_indices[:5]
 
-    # Calculate total sum of these top 5 predictions
-    #top_5_sum = sum(predicted_probabilities[0][i] for i in top_5_indices)
-
     # Construct the formatted output string
     formatted_output = ""
     cumulative_sum = 0
+    breeds = []
     for i in top_5_indices:
         prob = predicted_probabilities[0][i]
-        class_name_key = class_names[i]
-        dog_breed = class_name_to_breed.get(class_name_key, "Unknown")
-        formatted_output += f"{prob:.2f}%\t {dog_breed}\n"
-        cumulative_sum += prob
+        if prob > 1: # check if the probabilty is more than 1%
+            class_name_key = class_names[i]
+            dog_breed = class_name_to_breed.get(class_name_key, "Unknown")
+            breeds.append({"breedNames":dog_breed, "prob":round(float(prob),2)})
+            cumulative_sum += prob
+            other_prob = 100 - cumulative_sum
 
-    if len(filtered_indices) > 5:
-        other_prob = 100 - cumulative_sum
+    if len(filtered_indices) > 5: # more than 5 predictions would be summed as others
         formatted_output += f"{other_prob:.2f}%\t Others\n"
+        breeds.append({"breedNames":"Others", "prob":round(float(other_prob),2)})
 
-    return formatted_output
+   # Check if the cumulative probability in "Others" category is more than 75%
+        if other_prob > 75:
+            breeds = {"breedNames":"It doesn't look like a dog!", "prob":round(float(other_prob),2)}
+
+    return breeds
 
 
 def preprocess_image(image_path):
