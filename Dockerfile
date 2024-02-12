@@ -10,7 +10,8 @@ COPY models /models
 
 # Install the required dependencies
 COPY requirements.txt /requirements.txt
-RUN pip install --upgrade pip
-RUN pip install -r /requirements.txt
+COPY requirements.txt /requirements.txt
+RUN pip install --upgrade pip && \
+    pip install -r /requirements.txt
 
-# CMD uvicorn api.simple:app --host 0.0.0.0 --port $PORT
+CMD uvicorn app.simple:app --host 0.0.0.0 $PORT
