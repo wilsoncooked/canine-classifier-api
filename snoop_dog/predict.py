@@ -20,15 +20,28 @@ def format_predictions(predictions, class_names, min_probability=0.01):
     # Filter out indices with probabilities higher than min_probability
     filtered_indices = [i for i in sorted_indices if predicted_probabilities[0][i] >= min_probability]
 
+    # Take top 5 predictions
+    top_5_indices = filtered_indices[:5]
+
+    # Calculate total sum of these top 5 predictions
+    #top_5_sum = sum(predicted_probabilities[0][i] for i in top_5_indices)
+
     # Construct the formatted output string
     formatted_output = ""
-    for i in filtered_indices:
+    cumulative_sum = 0
+    for i in top_5_indices:
         prob = predicted_probabilities[0][i]
         class_name_key = class_names[i]
         dog_breed = class_name_to_breed.get(class_name_key, "Unknown")
         formatted_output += f"{prob:.2f}%\t {dog_breed}\n"
+        cumulative_sum += prob
+
+    if len(filtered_indices) > 5:
+        other_prob = 100 - cumulative_sum
+        formatted_output += f"{other_prob:.2f}%\t Others\n"
 
     return formatted_output
+
 
 def preprocess_image(image_path):
     print('Preprocessing 🐕')
