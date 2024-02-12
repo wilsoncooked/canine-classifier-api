@@ -1,8 +1,16 @@
 import tensorflow as tf
 import numpy as np
+import csv
+
+class_name_to_breed = {}
+with open('data/dog_breed_names.csv', newline='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        class_name_to_breed[row['class_name']] = row['dog_breed']
 
 
 def format_predictions(predictions, class_names, min_probability=0.01):
+    print('Formatting 🐩')
     # Convert the predicted probabilities to percentages
     predicted_probabilities = predictions * 100
 
@@ -16,12 +24,14 @@ def format_predictions(predictions, class_names, min_probability=0.01):
     formatted_output = ""
     for i in filtered_indices:
         prob = predicted_probabilities[0][i]
-        class_name = class_names[i].split('-')[1].replace('_', ' ').title()
-        formatted_output += f"{prob:.2f}%\t {class_name}\n"
+        class_name_key = class_names[i]
+        dog_breed = class_name_to_breed.get(class_name_key, "Unknown")
+        formatted_output += f"{prob:.2f}%\t {dog_breed}\n"
 
     return formatted_output
 
 def preprocess_image(image_path):
+    print('Preprocessing 🐕')
     img = tf.keras.preprocessing.image.load_img(image_path, target_size=(256, 256))
     img_array = tf.keras.preprocessing.image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
