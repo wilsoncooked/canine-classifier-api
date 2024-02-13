@@ -2,7 +2,7 @@
 #################### PACKAGE ACTIONS ###################
 reinstall_package:
 	@pip uninstall -y canine-classifier || :
-	@pip install -e --no-cache-dir .
+	@pip install -e .
 
 run_api:
 	uvicorn snoop_dog.api.api:app --reload
@@ -14,7 +14,7 @@ docker_run:
 	docker run -it -e PORT=8000 -p 8000:8000 ${GAR_IMAGE}
 
 docker_build_prod:
-	docker build -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/canine-classifier/${GAR_IMAGE}:prod .
+	docker build --platform linux/amd64 -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/canine-classifier/${GAR_IMAGE}:prod .
 
 docker_run_prod:
 	docker run -it -e PORT=8000 -p 8000:8000 --env-file .env ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/canine-classifier/${GAR_IMAGE}:prod

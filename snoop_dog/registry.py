@@ -16,5 +16,5 @@ def dogimg_process(img):
     return img_array
 
 def load_dogmodel():
-    new_model = keras.models.load_model(f"{os.path.dirname(os.path.dirname(__file__))}/models/effnetv2s_finetuned_valsplit01.keras")
+    new_model = keras.models.load_model(f"{os.path.dirname(os.path.dirname(__file__))}/models/effnetv2l_finetuned_valsplit01.keras")
     return new_model
