@@ -2,7 +2,6 @@ from tensorflow import keras
 import numpy as np
 from PIL import Image
 import os
-import matplotlib.pyplot as plt
 
 def load_image(img):
     img = Image.open(img).convert("RGB")
