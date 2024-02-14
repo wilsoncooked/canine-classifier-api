@@ -18,4 +18,4 @@ RUN apt update
 RUN apt install -y curl 
 
 # Define the command to run your API
-CMD uvicorn snoop_dog.api.api:app --host 0.0.0.0 --port $PORT & sleep 1m && curl http://127.0.0.1:$PORT/start 
+CMD uvicorn snoop_dog.api.api:app --host 0.0.0.0 --port $PORT & sleep 1m && curl http://127.0.0.1:$PORT/start ; while true; do sleep 15m && curl https://dogapi-6dinnn4gla-ew.a.run.app; done
