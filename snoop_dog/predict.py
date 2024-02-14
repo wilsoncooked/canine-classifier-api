@@ -42,7 +42,7 @@ def format_predictions(predictions, class_names, min_probability=0.01):
 
    # Check if the cumulative probability in "Others" category is more than 75%
         if other_prob > 75:
-            breeds = {"breedNames":"It doesn't look like a dog!", "prob":round(float(other_prob),2)}
+            breeds = [{"breedNames":"It doesn't look like a dog!", "prob":round(float(other_prob),2)}]
 
     return breeds
 
