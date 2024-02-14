@@ -1,4 +1,6 @@
 .env
+.yaml
+.env.yaml
 
 # OS generated files #
 ######################

@@ -5,12 +5,15 @@ FROM python:3.10.6-buster
 WORKDIR /canine_classifier
 
 # Copy the application code to the container
-COPY snoop_dog /snoop_dog
-COPY models /models
+COPY snoop_dog snoop_dog
+COPY models models
+COPY data data
 
 # Install the required dependencies
-COPY requirements.txt /requirements.txt
-RUN pip install --upgrade pip
-RUN pip install -r /requirements.txt
+COPY setup.py setup.py
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+RUN pip install .
 
-# CMD uvicorn api.simple:app --host 0.0.0.0 --port $PORT
+# Define the command to run your API
+CMD uvicorn snoop_dog.api.api:app --host 0.0.0.0 --port $PORT
