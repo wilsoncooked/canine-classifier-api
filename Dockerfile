@@ -1,5 +1,5 @@
 # Specify the base image
-FROM python:3.10.6-slim-buster
+FROM python:3.10.6-buster
 
 # Set the working directory inside the container
 WORKDIR /canine_classifier
@@ -12,6 +12,7 @@ COPY data data
 # Install the required dependencies
 COPY setup.py setup.py
 COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 RUN pip install .
 
 # Define the command to run your API
