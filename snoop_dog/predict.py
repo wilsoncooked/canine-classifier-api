@@ -2,11 +2,12 @@ import tensorflow as tf
 import numpy as np
 import csv
 
-class_name_to_breed = {}
+
+csv_data = []
 with open('data/dog_breed_names.csv', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        class_name_to_breed[row['class_name']] = row['dog_breed']
+        csv_data.append(row)
 
 
 def format_predictions(predictions, class_names, min_probability=0.01):
@@ -31,18 +32,30 @@ def format_predictions(predictions, class_names, min_probability=0.01):
         prob = predicted_probabilities[0][i]
         if prob > 1: # check if the probabilty is more than 1%
             class_name_key = class_names[i]
-            dog_breed = class_name_to_breed.get(class_name_key, "Unknown")
-            breeds.append({"breedNames":dog_breed, "prob":round(float(prob),2)})
+            dog = next((item for item in csv_data if item['class_name'] == class_name_key), None)
+            breeds.append({
+                    "breedNames":dog['dog_breed'],
+                    "prob":round(float(prob),2),
+                    "referenceImageId": dog['reference_image_id']
+                    })
             cumulative_sum += prob
             other_prob = 100 - cumulative_sum
 
     if len(filtered_indices) > 5: # more than 5 predictions would be summed as others
         formatted_output += f"{other_prob:.2f}%\t Others\n"
-        breeds.append({"breedNames":"Others", "prob":round(float(other_prob),2)})
+        breeds.append({
+            "breedNames":"Others",
+            "prob":round(float(other_prob),2),
+            "referenceImageId": None
+            })
 
    # Check if the cumulative probability in "Others" category is more than 75%
         if other_prob > 75:
-            breeds = [{"breedNames":"It doesn't look like a dog!", "prob":round(float(other_prob),2)}]
+            breeds = [{
+                "breedNames":"It doesn't look like a dog!",
+                "prob":round(float(other_prob),2),
+                "referenceImageId": None
+                }]
 
     return breeds
 
