@@ -14,12 +14,17 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-
-app.state.model = load_dogmodel()
+app.state.model = None
 
 @app.get("/")
 def index():
     return {"status": "ok"}
+
+@app.get("/start")
+def start():
+    if not app.state.model:
+        app.state.model = load_dogmodel()
+    return {"status": "started"}
 
 @app.post('/upload_image')
 async def receive_image(img: UploadFile=File(...)):

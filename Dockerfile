@@ -14,5 +14,8 @@ COPY setup.py setup.py
 COPY requirements.txt requirements.txt
 RUN pip install .
 
+RUN apt update
+RUN apt install -y curl 
+
 # Define the command to run your API
-CMD uvicorn snoop_dog.api.api:app --host 0.0.0.0 --port $PORT
+CMD uvicorn snoop_dog.api.api:app --host 0.0.0.0 --port $PORT & sleep 1m && curl http://127.0.0.1:$PORT/start 
