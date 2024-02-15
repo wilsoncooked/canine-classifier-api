@@ -12,6 +12,5 @@ def predict_breeds(model, img):
     model = model
     predictions = model.predict(image_processed)
     output = format_predictions(predictions, class_names)
-    grad_img = gradcam(model, image_processed)
-    output[0]['ai_view'] = base64.b64encode(grad_img) # Check if not a dog
+    output[0]['gradcam'] = gradcam(model, image_processed)
     return output

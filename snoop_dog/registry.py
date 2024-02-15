@@ -6,6 +6,8 @@ import tensorflow as tf
 import cv2
 import matplotlib.pyplot as plt
 import io
+import random
+import string
 
 def load_image(img):
     img = Image.open(img).convert("RGB")
@@ -47,17 +49,17 @@ def gradcam(model, img_array):
     pooled_grads = pooled_grads.numpy()
     for i in range(pooled_grads.shape[-1]):
         last_conv_layer_output[:, :, i] *= pooled_grads[i]
-    np.shape(last_conv_layer_output)
     gradcam = np.mean(last_conv_layer_output, axis=-1)
     gradcam = np.clip(gradcam, 0, np.max(gradcam)) / np.max(gradcam)
-    gradcam = cv2.resize(gradcam, (256, 256)) # Can be probably also be done with PIL
-    fig = plt.figure(visible=False)
-    canvas = fig.canvas
-    ax = fig.gca()
-    fig = plt.imshow(np.squeeze(img_array))
-    fig = plt.imshow(gradcam, alpha=0.5)
-    ax.axis('off')
-    canvas.draw()
-    image_flat = np.frombuffer(canvas.tostring_rgb(), dtype='uint8')
-    img_arr = image_flat.reshape(*reversed(canvas.get_width_height()), 3)
-    return img_arr
+    gradcam = cv2.resize(gradcam, (256, 256)) # Can probably also be done with PIL
+    fig = plt.figure(visible=True, frameon=False)
+    ax = plt.Axes(fig, [0., 0., 1., 1.] )
+    fig.set_size_inches(1,1)
+    ax.set_axis_off()
+    fig.add_axes(ax)
+    plt.imshow(img_array[0, :, :, :] / 255., aspect='auto')
+    plt.imshow(gradcam, alpha=0.5, aspect='auto')
+    random_name = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+    filename = './static/'+random_name+'.jpg'
+    plt.savefig(filename, dpi=256)
+    return filename[1:]
