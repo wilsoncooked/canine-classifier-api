@@ -1,5 +1,4 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from snoop_dog.registry import load_dogmodel
 from snoop_dog.main import predict_breeds

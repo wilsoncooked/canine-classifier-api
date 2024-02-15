@@ -1,8 +1,6 @@
 from snoop_dog.predict import format_predictions
 from snoop_dog.class_names import class_names
 from snoop_dog.registry import load_image, dogimg_process, gradcam
-import base64
-
     
 
 # put it all together for the api
