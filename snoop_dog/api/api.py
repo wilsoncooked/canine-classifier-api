@@ -2,8 +2,11 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from snoop_dog.registry import load_dogmodel
 from snoop_dog.main import predict_breeds
+from fastapi.staticfiles import StaticFiles
+
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Allow all requests (optional, good for development purposes)
 app.add_middleware(
@@ -13,7 +16,6 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
-
 
 app.state.model = load_dogmodel()
 
@@ -26,5 +28,4 @@ async def receive_image(img: UploadFile=File(...)):
     model = app.state.model
     image = img.file
     result = predict_breeds(model, image)
-    ### Encoding and responding with the image
     return result
